@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Have a Question... 🌸</title>
+    <style>
+        :root {
+            --pink-main: #ff7597;
+            --pink-hover: #ff4d79;
+            --bg-color: #ffeef2;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 117, 151, 0.2);
+            max-width: 450px;
+            width: 90%;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        h1 {
+            color: #d6336c;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .gif-container {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            position: relative;
+            min-height: 60px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.1s ease, background-color 0.2s ease;
+        }
+
+        .btn-yes {
+            background-color: var(--pink-main);
+            color: white;
+        }
+
+        .btn-yes:hover {
+            background-color: var(--pink-hover);
+            transform: scale(1.05);
+        }
+
+        .btn-no {
+            background-color: #ced4da;
+            color: #495057;
+            position: absolute;
+            transition: left 0.1s ease, top 0.1s ease;
+        }
+
+        /* Celebration screen styling */
+        .japan-details {
+            background: #fff0f6;
+            border: 2px dashed #ff85a2;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+            color: #c2255c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="mainCard">
+        <!-- Stage 1 View -->
+        <div id="contentBox">
+            <div class="gif-container" id="emojiHeader">💝</div>
+            <h1 id="questionText">Would you like to be my gf?</h1>
+            
+            <div class="btn-container" id="buttonGroup">
+                <button class="btn-yes" id="yesBtn" onclick="nextStage()">Yes</button>
+                <button class="btn-no" id="noBtn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let stage = 1;
+        const questionText = document.getElementById('questionText');
+        const emojiHeader = document.getElementById('emojiHeader');
+        const buttonGroup = document.getElementById('buttonGroup');
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+
+        // Make the "No" button run away on hover and click
+        function moveNoButton() {
+            // Get random positions within the viewport boundaries, keeping it within reach but away from the cursor
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40) + 20;
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40) + 20;
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('click', moveNoButton);
+
+        // Handle the progression logic
+        function nextStage() {
+            if (stage === 1) {
+                // Advance to Stage 2 (Confirming the "Yes" choice)
+                stage = 2;
+                emojiHeader.innerHTML = "🥰";
+                questionText.innerHTML = "Yay! Best decision ever! ❤️";
+                
+                // Remove the sneaky "No" button entirely for the final surprise
+                noBtn.remove();
+                
+                // Update the main button text for the next click
+                yesBtn.innerHTML = "Click for a surprise! ✨";
+            } else if (stage === 2) {
+                // Advance to Stage 3 (The Japan Trip Reveal)
+                emojiHeader.innerHTML = "🌸✈️🇯🇵";
+                questionText.innerHTML = "Pack your bags!";
+                
+                // Insert the trip details
+                buttonGroup.innerHTML = `
+                    <div class="japan-details">
+                        <p style="font-size: 1.3rem; margin: 0 0 10px 0;">🎉 FREE JAPAN TRIP! 🎉</p>
+                        <p style="margin: 5px 0;">Duration: 5 Days</p>
+                        <p style="margin: 5px 0;">When: After June 15th</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
