@@ -113,6 +113,7 @@
             line-height: 1.5;
             color: #51cf66; 
             text-shadow: 0 0 5px rgba(81, 207, 102, 0.5);
+            text-align: center;
         }
 
         /* Japan Ticket Aesthetic */
@@ -128,6 +129,23 @@
             width: 100%;
             transform: scale(0);
             animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* FINAL Reward Image Styling */
+        .reward-image-container {
+            width: 100%;
+            height: auto;
+            margin-top: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #000;
+            transform: scale(0);
+            animation: popIn 0.5s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* Slight delay for effect */
+        }
+
+        .reward-image-container img {
+            width: 100%;
+            display: block;
         }
 
         @keyframes popIn {
@@ -172,7 +190,7 @@
             color: #000;
             position: absolute;
             transition: left 0.1s ease, top 0.1s ease;
-            z-index: 9999; /* Make sure it stays on top while running away */
+            z-index: 9999; 
         }
     </style>
 </head>
@@ -216,7 +234,6 @@
 
         // The Runaway Function
         function flee() {
-            // Generates completely random coordinates anywhere on the viewport
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40) + 20;
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40) + 20;
             
@@ -225,36 +242,31 @@
             noBtn.style.top = y + 'px';
         }
 
-        // Attach running listeners to the No button
         function setupNoButtonListeners() {
             noBtn.addEventListener('mouseenter', flee);
             noBtn.addEventListener('click', flee);
             noBtn.addEventListener('touchstart', function(e) {
-                e.preventDefault(); // Stops mobile phones from accidentally clicking it on tap
+                e.preventDefault(); 
                 flee();
             });
         }
 
-        // Initialize listeners for the first step
         setupNoButtonListeners();
 
         // Progression Engine
         function handleYes() {
             if (step === 1) {
-                // Click 2 Processing
                 step = 2;
                 emojiElement.innerHTML = "✨🥰✨";
                 textElement.style.color = "#ff8787"; 
                 textElement.innerHTML = "CRITICAL ACCESS GRANTED:<br>> Processing reward script...";
                 
-                // Hide the "No" button entirely so she can look at the ticket safely
                 noBtn.style.display = 'none';
                 
                 const yesBtn = document.getElementById('yesBtn');
                 yesBtn.innerHTML = "CLAIM REWARD 💾";
 
             } else if (step === 2) {
-                // Click 3: Reveal Japan Trip Voucher
                 step = 3;
                 emojiElement.innerHTML = "✈️🌸🇯🇵";
                 textElement.innerHTML = `
@@ -273,13 +285,11 @@
                 yesBtn.innerHTML = "CONTINUE SYSTEM CHECK ⚙️";
 
             } else if (step === 3) {
-                // Click 4: Love confirmation challenge
                 step = 4;
                 emojiElement.innerHTML = "🔮💖";
                 textElement.style.color = "#4dadf7"; 
                 textElement.innerHTML = "FINAL HARDWARE TEST:<br>> Do you love me?";
                 
-                // Reset the "No" button back to its position and make it run away again!
                 noBtn.style.position = 'absolute';
                 noBtn.style.left = 'auto';
                 noBtn.style.top = 'auto';
@@ -289,14 +299,20 @@
                 yesBtn.innerHTML = "YES, UNCONDITIONALLY";
 
             } else if (step === 4) {
-                // Click 5: Ending Complete!
                 step = 5;
                 emojiElement.innerHTML = "👑💝🏡";
                 textElement.style.color = "#51cf66"; 
                 textElement.innerHTML = "SYSTEM NOMINAL.<br><br>Connection Established.<br>Destination Locked: Japan 🌸<br>I love you too!";
                 
-                // Remove buttons entirely at the end
+                // Remove buttons
                 controlPanel.innerHTML = "";
+
+                // ADDING THE IMAGE REWARD HERE:
+                const screen = document.querySelector('.screen');
+                const imageContainer = document.createElement('div');
+                imageContainer.className = 'reward-image-container';
+                imageContainer.innerHTML = `<img src="image_1.png" alt="Couple Reward Image">`;
+                screen.appendChild(imageContainer);
             }
         }
     </script>
