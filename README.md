@@ -111,7 +111,7 @@
             font-size: 1.25rem;
             font-weight: bold;
             line-height: 1.5;
-            color: #51cf66; /* Retro Green terminal text */
+            color: #51cf66; 
             text-shadow: 0 0 5px rgba(81, 207, 102, 0.5);
         }
 
@@ -134,7 +134,7 @@
             100% { transform: scale(1); }
         }
 
-        /* Buttons Styling (Chunky Game-Boy Aesthetic) */
+        /* Buttons Styling */
         .controls {
             display: flex;
             justify-content: center;
@@ -164,13 +164,15 @@
         .btn-yes {
             background: var(--primary);
             color: #fff;
+            z-index: 10;
         }
 
         .btn-no {
             background: #e9ecef;
             color: #000;
             position: absolute;
-            transition: left 0.12s linear, top 0.12s linear, transform 0.2s ease;
+            transition: left 0.1s ease, top 0.1s ease;
+            z-index: 9999; /* Make sure it stays on top while running away */
         }
     </style>
 </head>
@@ -192,11 +194,10 @@
 
     <script>
         let step = 1;
-        let noScale = 1;
         const textElement = document.getElementById('displayText');
         const emojiElement = document.getElementById('displayEmoji');
         const controlPanel = document.getElementById('controlPanel');
-        const noBtn = document.getElementById('noBtn');
+        let noBtn = document.getElementById('noBtn');
 
         // Create Background Hearts
         function spawnHearts() {
@@ -213,41 +214,42 @@
         }
         spawnHearts();
 
-        // Runaway Engine + Shrink Strategy
+        // The Runaway Function
         function flee() {
-            // Get random bounds keeping it safe inside the inner viewport padding
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 60) + 30;
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 60) + 30;
+            // Generates completely random coordinates anywhere on the viewport
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40) + 20;
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40) + 20;
             
             noBtn.style.position = 'fixed';
             noBtn.style.left = x + 'px';
             noBtn.style.top = y + 'px';
-
-            // Shrink it every time she tries to touch it so it gets progressively harder
-            if(noScale > 0.3) {
-                noScale -= 0.1;
-                noBtn.style.transform = `scale(${noScale})`;
-            }
         }
 
-        // Event hooks for evasive maneuvers
-        noBtn.addEventListener('mouseenter', flee);
-        noBtn.addEventListener('click', flee);
-        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); flee(); });
+        // Attach running listeners to the No button
+        function setupNoButtonListeners() {
+            noBtn.addEventListener('mouseenter', flee);
+            noBtn.addEventListener('click', flee);
+            noBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault(); // Stops mobile phones from accidentally clicking it on tap
+                flee();
+            });
+        }
+
+        // Initialize listeners for the first step
+        setupNoButtonListeners();
 
         // Progression Engine
         function handleYes() {
             if (step === 1) {
                 // Click 2 Processing
                 step = 2;
-                emojiElement.innerHTML = "✨🦉✨";
-                textElement.style.color = "#ff8787"; // Change terminal font color to soft pink
+                emojiElement.innerHTML = "✨🥰✨";
+                textElement.style.color = "#ff8787"; 
                 textElement.innerHTML = "CRITICAL ACCESS GRANTED:<br>> Processing reward script...";
                 
-                // Hide the "No" button entirely while ticket renders
+                // Hide the "No" button entirely so she can look at the ticket safely
                 noBtn.style.display = 'none';
                 
-                // Change Yes text to fire stage 3
                 const yesBtn = document.getElementById('yesBtn');
                 yesBtn.innerHTML = "CLAIM REWARD 💾";
 
@@ -267,7 +269,6 @@
                     </div>
                 `;
                 
-                // Transition action for next prompt
                 const yesBtn = document.getElementById('yesBtn');
                 yesBtn.innerHTML = "CONTINUE SYSTEM CHECK ⚙️";
 
@@ -275,15 +276,13 @@
                 // Click 4: Love confirmation challenge
                 step = 4;
                 emojiElement.innerHTML = "🔮💖";
-                textElement.style.color = "#4dadf7"; // Neon Blue terminal phase
+                textElement.style.color = "#4dadf7"; 
                 textElement.innerHTML = "FINAL HARDWARE TEST:<br>> Do you love me?";
                 
-                // Revive the RUNAWAY NO button at original size
-                noScale = 1;
+                // Reset the "No" button back to its position and make it run away again!
                 noBtn.style.position = 'absolute';
                 noBtn.style.left = 'auto';
                 noBtn.style.top = 'auto';
-                noBtn.style.transform = 'scale(1)';
                 noBtn.style.display = 'block';
 
                 const yesBtn = document.getElementById('yesBtn');
@@ -293,10 +292,10 @@
                 // Click 5: Ending Complete!
                 step = 5;
                 emojiElement.innerHTML = "👑💝🏡";
-                textElement.style.color = "#51cf66"; // Success Green
+                textElement.style.color = "#51cf66"; 
                 textElement.innerHTML = "SYSTEM NOMINAL.<br><br>Connection Established.<br>Destination Locked: Japan 🌸<br>I love you too!";
                 
-                // Wipe controls out completely
+                // Remove buttons entirely at the end
                 controlPanel.innerHTML = "";
             }
         }
