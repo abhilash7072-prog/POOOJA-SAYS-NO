@@ -3,204 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I Have a Question... 🌸</title>
+    <title>Incoming Transmission... 🌸</title>
     <style>
         :root {
-            --pink-main: #ff7597;
-            --pink-hover: #ff4d79;
-            --bg-color: #ffeef2;
+            --primary: #ff6b8b;
+            --primary-light: #ffa3b1;
+            --accent: #4dadf7;
+            --bg: #fff0f3;
+            --terminal-bg: #2d3436;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background: linear-gradient(135deg, #ffe3e8 0%, #ffccd5 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             overflow: hidden;
-            text-align: center;
-        }
-
-        .card {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(255, 117, 151, 0.2);
-            max-width: 450px;
-            width: 90%;
-            transition: all 0.3s ease;
             position: relative;
         }
 
-        h1 {
-            color: #d6336c;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            line-height: 1.4;
+        /* Floating Hearts Background */
+        .hearts-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
         }
 
-        .gif-container {
-            font-size: 4rem;
-            margin-bottom: 20px;
+        .heart-particle {
+            position: absolute;
+            color: rgba(255, 107, 139, 0.2);
+            font-size: 20px;
+            animation: floatUp 6s linear infinite;
         }
 
-        .btn-container {
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Main Arcade Console */
+        .arcade-box {
+            background: #fff;
+            border: 4px solid #000;
+            border-radius: 24px;
+            padding: 30px;
+            width: 90%;
+            max-width: 480px;
+            box-shadow: 8px 8px 0px #000;
+            z-index: 2;
+            position: relative;
+            transform: rotate(-1deg);
+            animation: gentleFloat 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes gentleFloat {
+            0% { transform: translateY(0) rotate(-1deg); }
+            100% { transform: translateY(-10px) rotate(1deg); }
+        }
+
+        /* Screen Wrapper */
+        .screen {
+            background: var(--terminal-bg);
+            border: 3px solid #000;
+            border-radius: 12px;
+            padding: 25px 15px;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            margin-bottom: 25px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screen::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+        }
+
+        .emoji-hub {
+            font-size: 4.5rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .text-display {
+            font-size: 1.25rem;
+            font-weight: bold;
+            line-height: 1.5;
+            color: #51cf66; /* Retro Green terminal text */
+            text-shadow: 0 0 5px rgba(81, 207, 102, 0.5);
+        }
+
+        /* Japan Ticket Aesthetic */
+        .ticket {
+            background: #fff;
+            color: #000;
+            border: 2px dashed var(--primary);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            font-family: Arial, sans-serif;
+            box-shadow: 4px 4px 0px #000;
+            width: 100%;
+            transform: scale(0);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            100% { transform: scale(1); }
+        }
+
+        /* Buttons Styling (Chunky Game-Boy Aesthetic) */
+        .controls {
             display: flex;
             justify-content: center;
             gap: 20px;
-            margin-top: 20px;
             position: relative;
-            min-height: 60px;
+            min-height: 70px;
         }
 
-        button {
-            padding: 12px 30px;
+        .btn {
+            padding: 14px 28px;
             font-size: 1.1rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 50px;
+            font-weight: 900;
+            font-family: 'Courier New', Courier, monospace;
+            border: 3px solid #000;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.1s ease, background-color 0.2s ease;
+            position: relative;
+            box-shadow: 4px 4px 0px #000;
+            transition: all 0.1s ease;
+        }
+
+        .btn:active {
+            transform: translate(3px, 3px);
+            box-shadow: 1px 1px 0px #000;
         }
 
         .btn-yes {
-            background-color: var(--pink-main);
-            color: white;
-            z-index: 10;
-        }
-
-        .btn-yes:hover {
-            background-color: var(--pink-hover);
-            transform: scale(1.05);
+            background: var(--primary);
+            color: #fff;
         }
 
         .btn-no {
-            background-color: #ced4da;
-            color: #495057;
+            background: #e9ecef;
+            color: #000;
             position: absolute;
-            transition: left 0.15s ease, top 0.15s ease;
-            z-index: 5;
-        }
-
-        .japan-details {
-            background: #fff0f6;
-            border: 2px dashed #ff85a2;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 20px;
-            color: #c2255c;
-            font-weight: bold;
-            width: 100%;
-        }
-
-        .flex-column {
-            flex-direction: column;
-            align-items: center;
+            transition: left 0.12s linear, top 0.12s linear, transform 0.2s ease;
         }
     </style>
 </head>
 <body>
 
-    <div class="card" id="mainCard">
-        <div id="contentBox">
-            <div class="gif-container" id="emojiHeader">💝</div>
-            <h1 id="questionText">Would you like to be my gf?</h1>
-            
-            <div class="btn-container" id="buttonGroup">
-                <button class="btn-yes" id="yesBtn" onclick="nextStage()">Yes</button>
-                <button class="btn-no" id="noBtn">No</button>
-            </div>
+    <div class="hearts-bg" id="heartsBg"></div>
+
+    <div class="arcade-box">
+        <div class="screen">
+            <div class="emoji-hub" id="displayEmoji">💌</div>
+            <div class="text-display" id="displayText">SYSTEM: Execute love_request.exe?<br>> Would you like to be my gf?</div>
+        </div>
+        
+        <div class="controls" id="controlPanel">
+            <button class="btn btn-yes" id="yesBtn" onclick="handleYes()">YES</button>
+            <button class="btn btn-no" id="noBtn">NO</button>
         </div>
     </div>
 
     <script>
-        let stage = 1;
-        const questionText = document.getElementById('questionText');
-        const emojiHeader = document.getElementById('emojiHeader');
-        const buttonGroup = document.getElementById('buttonGroup');
-        let noBtn = document.getElementById('noBtn');
-        let yesBtn = document.getElementById('yesBtn');
+        let step = 1;
+        let noScale = 1;
+        const textElement = document.getElementById('displayText');
+        const emojiElement = document.getElementById('displayEmoji');
+        const controlPanel = document.getElementById('controlPanel');
+        const noBtn = document.getElementById('noBtn');
 
-        // Function to make the "No" button run away
-        function moveNoButton() {
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40) + 20;
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40) + 20;
+        // Create Background Hearts
+        function spawnHearts() {
+            const container = document.getElementById('heartsBg');
+            for (let i = 0; i < 20; i++) {
+                let heart = document.createElement('div');
+                heart.className = 'heart-particle';
+                heart.innerHTML = '🌸';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                container.appendChild(heart);
+            }
+        }
+        spawnHearts();
+
+        // Runaway Engine + Shrink Strategy
+        function flee() {
+            // Get random bounds keeping it safe inside the inner viewport padding
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 60) + 30;
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 60) + 30;
             
             noBtn.style.position = 'fixed';
             noBtn.style.left = x + 'px';
             noBtn.style.top = y + 'px';
-        }
 
-        // Attach runaway listeners to the initial No button
-        noBtn.addEventListener('mouseover', moveNoButton);
-        noBtn.addEventListener('click', moveNoButton);
-        noBtn.addEventListener('touchstart', moveNoButton); // Mobile friendly
-
-        function nextStage() {
-            if (stage === 1) {
-                // Click 2: "Yes only" screen
-                stage = 2;
-                emojiHeader.innerHTML = "🥰";
-                questionText.innerHTML = "Yay! Best decision ever! ❤️";
-                noBtn.style.display = 'none'; // Temporarily hide No button
-                yesBtn.innerHTML = "Click for a surprise! ✨";
-
-            } else if (stage === 3) {
-                // Click 4: "Do you love me?" question
-                stage = 4;
-                emojiHeader.innerHTML = "👀❓";
-                questionText.innerHTML = "One more question... Do you love me?";
-                
-                // Re-create the layout with a fresh running "No" button
-                buttonGroup.classList.remove('flex-column');
-                buttonGroup.innerHTML = `
-                    <button class="btn-yes" id="yesBtn" onclick="nextStage()">Yes</button>
-                    <button class="btn-no" id="noBtn">No</button>
-                `;
-                
-                // Re-bind variables and events to the new elements
-                noBtn = document.getElementById('noBtn');
-                yesBtn = document.getElementById('yesBtn');
-                noBtn.addEventListener('mouseover', moveNoButton);
-                noBtn.addEventListener('click', moveNoButton);
-                noBtn.addEventListener('touchstart', moveNoButton);
-
-            } else if (stage === 4) {
-                // Click 5: Final Love Confirmation Screen!
-                stage = 5;
-                emojiHeader.innerHTML = "💖👩‍❤️‍👨✨";
-                questionText.innerHTML = "I knew it! Love you to Japan and back! See you after June 15! 🌸";
-                buttonGroup.innerHTML = ''; // Clear buttons completely
+            // Shrink it every time she tries to touch it so it gets progressively harder
+            if(noScale > 0.3) {
+                noScale -= 0.1;
+                noBtn.style.transform = `scale(${noScale})`;
             }
         }
 
-        // Click 3 happens here: It handles the transition out of the Japan trip layout
-        function showLoveQuestion() {
-            stage = 3;
-            nextStage();
-        }
-        
-        // Overriding click 2 to display the Japan trip properly
-        window.addEventListener('click', function(e) {
-            if (e.target && e.target.id === 'yesBtn' && stage === 2) {
-                // Intercept the stage 2 click to inject the trip layout
-                e.stopPropagation(); 
-                emojiHeader.innerHTML = "🌸✈️🇯🇵";
-                questionText.innerHTML = "Pack your bags!";
-                buttonGroup.classList.add('flex-column');
-                buttonGroup.innerHTML = `
-                    <div class="japan-details">
-                        <p style="font-size: 1.3rem; margin: 0 0 10px 0;">🎉 FREE JAPAN TRIP! 🎉</p>
-                        <p style="margin: 5px 0;">Duration: 5 Days</p>
-                        <p style="margin: 5px 0;">When: After June 15th</p>
+        // Event hooks for evasive maneuvers
+        noBtn.addEventListener('mouseenter', flee);
+        noBtn.addEventListener('click', flee);
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); flee(); });
+
+        // Progression Engine
+        function handleYes() {
+            if (step === 1) {
+                // Click 2 Processing
+                step = 2;
+                emojiElement.innerHTML = "✨🦉✨";
+                textElement.style.color = "#ff8787"; // Change terminal font color to soft pink
+                textElement.innerHTML = "CRITICAL ACCESS GRANTED:<br>> Processing reward script...";
+                
+                // Hide the "No" button entirely while ticket renders
+                noBtn.style.display = 'none';
+                
+                // Change Yes text to fire stage 3
+                const yesBtn = document.getElementById('yesBtn');
+                yesBtn.innerHTML = "CLAIM REWARD 💾";
+
+            } else if (step === 2) {
+                // Click 3: Reveal Japan Trip Voucher
+                step = 3;
+                emojiElement.innerHTML = "✈️🌸🇯🇵";
+                textElement.innerHTML = `
+                    <div class="ticket">
+                        <div style="font-size:0.8rem; letter-spacing:2px; color:#aaa;">BOARDING PASS</div>
+                        <div style="font-size:1.4rem; font-weight:bold; color:var(--primary)">TOKYO & BEYOND</div>
+                        <hr style="border:none; border-top:1px dashed #ccc; margin:8px 0;">
+                        <div style="text-align:left; font-size:0.9rem; line-height:1.4;">
+                            • <strong>DURATION:</strong> 5 Magical Days<br>
+                            • <strong>VALID:</strong> Any day after June 15
+                        </div>
                     </div>
-                    <button class="btn-yes" id="nextSurpriseBtn" onclick="showLoveQuestion()">Next Surprise 🎁</button>
                 `;
+                
+                // Transition action for next prompt
+                const yesBtn = document.getElementById('yesBtn');
+                yesBtn.innerHTML = "CONTINUE SYSTEM CHECK ⚙️";
+
+            } else if (step === 3) {
+                // Click 4: Love confirmation challenge
+                step = 4;
+                emojiElement.innerHTML = "🔮💖";
+                textElement.style.color = "#4dadf7"; // Neon Blue terminal phase
+                textElement.innerHTML = "FINAL HARDWARE TEST:<br>> Do you love me?";
+                
+                // Revive the RUNAWAY NO button at original size
+                noScale = 1;
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = 'auto';
+                noBtn.style.top = 'auto';
+                noBtn.style.transform = 'scale(1)';
+                noBtn.style.display = 'block';
+
+                const yesBtn = document.getElementById('yesBtn');
+                yesBtn.innerHTML = "YES, UNCONDITIONALLY";
+
+            } else if (step === 4) {
+                // Click 5: Ending Complete!
+                step = 5;
+                emojiElement.innerHTML = "👑💝🏡";
+                textElement.style.color = "#51cf66"; // Success Green
+                textElement.innerHTML = "SYSTEM NOMINAL.<br><br>Connection Established.<br>Destination Locked: Japan 🌸<br>I love you too!";
+                
+                // Wipe controls out completely
+                controlPanel.innerHTML = "";
             }
-        }, true);
+        }
     </script>
 </body>
 </html>
